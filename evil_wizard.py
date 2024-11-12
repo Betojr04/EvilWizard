@@ -1,4 +1,8 @@
-# Base Character class
+"""
+Base Character class
+"""
+
+
 class Character:
     def __init__(self, name, health, attack_power):
         self.name = name
@@ -18,19 +22,31 @@ class Character:
         )
 
 
-# Warrior class (inherits from Character)
+"""
+Warrior class (inherits from Character)
+"""
+
+
 class Warrior(Character):
     def __init__(self, name):
         super().__init__(name, health=140, attack_power=25)
 
 
-# Mage class (inherits from Character)
+""" 
+Mage class (inherits from Character)
+"""
+
+
 class Mage(Character):
     def __init__(self, name):
         super().__init__(name, health=100, attack_power=35)
 
 
-# EvilWizard class (inherits from Character)
+""" 
+EvilWizard class (inherits from Character)
+"""
+
+
 class EvilWizard(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=15)
@@ -40,15 +56,37 @@ class EvilWizard(Character):
         print(f"{self.name} regenerates 5 health! Current health: {self.health}")
 
 
-# NEW CHARACTERS
+"""
+ARCHER CLASS
+"""
+
+
 class Archer(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)
+
+    def double_arrow(self, opponent):
+        damage = self.attack_power * 2
+        opponent.health -= damage
+
+        print(
+            f"{self.name} attacks {opponent.name} with a double arrow for {damage} damage!"
+        )
+
+
+"""
+PALADIN CLASS
+"""
 
 
 class Paladin(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)
+
+
+"""
+CREATE CHARACTER FUNCTION
+"""
 
 
 def create_character():
@@ -72,6 +110,11 @@ def create_character():
     else:
         print("Invalid choice. Defaulting to Warrior.")
         return Warrior(name)
+
+
+"""
+BATTLE FUNCTION 
+"""
 
 
 def battle(player, wizard):
