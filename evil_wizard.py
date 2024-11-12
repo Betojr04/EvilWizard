@@ -66,9 +66,9 @@ def create_character():
     elif class_choice == "2":
         return Mage(name)
     elif class_choice == "3":
-        pass  # Implement Archer class
+        return Archer(name)
     elif class_choice == "4":
-        pass  # Implement Paladin class
+        return Paladin(name)
     else:
         print("Invalid choice. Defaulting to Warrior.")
         return Warrior(name)
