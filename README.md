@@ -32,7 +32,7 @@ Start Code is attached at the bottom of this document so make sure to scroll dow
   * Archer: "Quick Shot" (double arrow attack) and "Evade" (avoid next attack).
   * Paladin: "Holy Strike" (bonus damage) and "Divine Shield" (blocks the next attack).
 
-### Add a Healing Mechanic:
+### Add a Healing Mechanic
 
 * Implement a heal() method that restores health but doesn’t exceed the maximum.
 

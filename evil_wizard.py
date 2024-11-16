@@ -1,3 +1,5 @@
+import random
+
 """
 Base Character class
 """
@@ -11,15 +13,31 @@ class Character:
         self.max_health = health
 
     def attack(self, opponent):
-        opponent.health -= self.attack_power
-        print(f"{self.name} attacks {opponent.name} for {self.attack_power} damage!")
+        random_damage_power = random.randint(
+            self.attack_power - 10, self.attack_power + 10
+        )
+        opponent.health -= random_damage_power
+        print(f"{self.name} attacks {opponent.name} for {random_damage_power} damage!")
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
 
     def display_stats(self):
         print(
-            f"{self.name}'s Stats - Health: {self.health}/{self.max_health}, Attack Power: {self.attack_power}"
+            f"{self.name}'s Stats - Health: {self.health}/{self.max_health}"
+            f", Attack Power: {self.attack_power}"
         )
+
+    def heal(self):
+        if self.health < self.max_health:
+            self.health += 15
+
+            if self.health > self.max_health:
+                self.health = self.max_health
+            print(
+                f"{self.name} healed by 15. {self.name} is now at health: {self.health}"
+            )
+        else:
+            print(f"Cannot heal past the max health: {self.max_health}.")
 
 
 """
@@ -66,12 +84,22 @@ class Archer(Character):
         super().__init__(name, health=150, attack_power=40)
 
     def double_arrow(self, opponent):
-        damage = self.attack_power * 2
-        opponent.health -= damage
+        random_damage_power = random.randint(
+            max(0, self.attack_power - 10), self.attack_power + 10
+        )
+        random_damage_power *= 2
+        opponent.health -= random_damage_power
 
         print(
-            f"{self.name} attacks {opponent.name} with a double arrow for {damage} damage!"
+            f"{self.name} attacks {opponent.name} with a double arrow for "
+            f"{random_damage_power} damage!"
         )
+
+    def evade_active(self):
+        pass
+
+    def evade_attack(self, opponent):
+        pass
 
 
 """
@@ -82,6 +110,25 @@ PALADIN CLASS
 class Paladin(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)
+
+    def holy_strike(self, opponent, random_damage_power):
+        if opponent.health < 90:
+            bonus_damage = 30
+            opponent.health -= random_damage_power + bonus_damage
+            print(
+                f"{self.name} uses Holy Strike on {opponent} dealing"
+                f"{random_damage_power + bonus_damage} damage!"
+            )
+        else:
+            """this below calls attack from parent class to use its print
+            statement and condition"""
+            self.attack(opponent)
+
+    def shield_active(self):
+        pass
+
+    def divine_shield(self, opponent):
+        pass
 
 
 """
