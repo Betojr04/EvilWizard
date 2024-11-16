@@ -13,11 +13,22 @@ class Character:
         self.max_health = health
 
     def attack(self, opponent):
+        if hasattr(opponent, "evade_active") and opponent.evade_active:
+            print(f"{opponent.name} evades the attack!")
+            opponent.evade_active = False
+            return
+
+        if hasattr(opponent, "shield_active") and opponent.shield_active:
+            print(f"{opponent.name}'s Divine Shield blocks the attack!")
+            opponent.shield_active = False
+            return
+
         random_damage_power = random.randint(
             self.attack_power - 10, self.attack_power + 10
         )
         opponent.health -= random_damage_power
         print(f"{self.name} attacks {opponent.name} for {random_damage_power} damage!")
+
         if opponent.health <= 0:
             print(f"{opponent.name} has been defeated!")
 
@@ -82,6 +93,7 @@ ARCHER CLASS
 class Archer(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)
+        self.evade_active = False
 
     def double_arrow(self, opponent):
         random_damage_power = random.randint(
@@ -89,17 +101,14 @@ class Archer(Character):
         )
         random_damage_power *= 2
         opponent.health -= random_damage_power
-
         print(
             f"{self.name} attacks {opponent.name} with a double arrow for "
             f"{random_damage_power} damage!"
         )
 
-    def evade_active(self):
-        pass
-
-    def evade_attack(self, opponent):
-        pass
+    def activate_evade(self):
+        self.evade_active = True
+        print(f"{self.name} activates Evade! They will dodge the next attack.")
 
 
 """
@@ -110,25 +119,23 @@ PALADIN CLASS
 class Paladin(Character):
     def __init__(self, name):
         super().__init__(name, health=150, attack_power=40)
+        self.shield_active = False
 
-    def holy_strike(self, opponent, random_damage_power):
+    def holy_strike(self, opponent):
         if opponent.health < 90:
             bonus_damage = 30
-            opponent.health -= random_damage_power + bonus_damage
+            super().attack(opponent)
+            opponent.health -= bonus_damage
             print(
-                f"{self.name} uses Holy Strike on {opponent} dealing"
-                f"{random_damage_power + bonus_damage} damage!"
+                f"{self.name} uses Holy Strike on {opponent.name}, dealing an additional "
+                f"{bonus_damage} bonus damage!"
             )
         else:
-            """this below calls attack from parent class to use its print
-            statement and condition"""
-            self.attack(opponent)
+            super().attack(opponent)
 
-    def shield_active(self):
-        pass
-
-    def divine_shield(self, opponent):
-        pass
+    def activate_shield(self):
+        self.shield_active = True
+        print(f"{self.name} activates Divine Shield! They will block the next attack.")
 
 
 """
@@ -177,9 +184,30 @@ def battle(player, wizard):
         if choice == "1":
             player.attack(wizard)
         elif choice == "2":
-            pass  # Implement special abilities
+            if isinstance(player, Archer):
+                print("1. Double Arrow")
+                print("2. Evade")
+                special_choice = input("Choose a special ability: ")
+                if special_choice == "1":
+                    player.double_arrow(wizard)
+                elif special_choice == "2":
+                    player.activate_evade()
+                else:
+                    print("Invalid choice.")
+            elif isinstance(player, Paladin):
+                print("1. Holy Strike")
+                print("2. Divine Shield")
+                special_choice = input("Choose a special ability: ")
+                if special_choice == "1":
+                    player.holy_strike(wizard)
+                elif special_choice == "2":
+                    player.activate_shield()
+                else:
+                    print("Invalid choice.")
+            else:
+                print("Your character has no special offensive abilities.")
         elif choice == "3":
-            pass  # Implement heal method
+            player.heal()
         elif choice == "4":
             player.display_stats()
         else:
